@@ -1,0 +1,19 @@
+dependencies:
+  cache_directories:
+    - ".stack-work"
+    - "~/.stack"
+
+  pre:
+    - wget -q -O- https://s3.amazonaws.com/download.fpcomplete.com/ubuntu/fpco.key | sudo apt-key add -
+    - echo 'deb http://download.fpcomplete.com/ubuntu trusty main' | sudo tee /etc/apt/sources.list.d/fpco.list
+    - sudo apt-get update
+    - sudo apt-get install libsdl2-dev libcairo2-dev libpango1.0-de stack
+
+  override:
+    - stack setup
+    - stack install gtk2hs-buildtools
+    - stack build --test --only-dependencies
+
+test:
+  override:
+    - stack test
